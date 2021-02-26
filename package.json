@@ -1,7 +1,7 @@
 {
-  "name": "foundry-typescript-template",
+  "name": "wombora-jounral-helper",
   "version": "1.0.0",
-  "description": "Foundry VTT Typescript Template",
+  "description": "Womboras Journal Helper for Foundry VTT",
   "main": "index.js",
   "scripts": {
     "build": "gulp build"

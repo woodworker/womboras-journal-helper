@@ -25,10 +25,29 @@ jobs:
         working-directory: ./dist
         run: zip -r ../womboras-journal-helper.zip *
 
-      - name: Create release
-        id: create_versioned_release
+      # Update the 'latest' release
+      - name: Update Latest Release
+        id: create_latest_release
+        uses: ncipollo/release-action@v1
+        if: endsWith(github.ref, 'master')
+        with:
+          allowUpdates: true
+          name: Latest
+          draft: false
+          prerelease: false
+          token: ${{ secrets.GITHUB_TOKEN }}
+          artifacts: './module/module.json, ./womboras-journal-helper.zip'
+          tag: latest
+
+      # Create a release for this specific version
+      - name: Create Version Release
+        id: create_version_release
         uses: ncipollo/release-action@v1
         with:
-          name: ${{ steps.get-version.outputs.version }}
+          allowUpdates: true # set this to false if you want to prevent updating existing releases
+          name: Release ${{ steps.get-version.outputs.version }}
+          draft: false
+          prerelease: false
           token: ${{ secrets.GITHUB_TOKEN }}
           artifacts: './module/module.json,./womboras-journal-helper.zip'
+          tag: ${{ steps.get-version.outputs.version }}

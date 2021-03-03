@@ -1,4 +1,4 @@
-import { renderJournalSheet } from './hooks/renderJournalSheet.js'
+import { renderJournalSheet } from './hooks/renderJournalSheet'
 
 
 console.log('Womboras Journal Renderer Loaded');

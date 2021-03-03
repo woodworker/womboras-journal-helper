@@ -1,20 +1,49 @@
 {
-  "name": "wombora-jounral-helper",
-  "version": "1.0.0",
+  "name": "womboras-jounral-helper",
+  "version": "0.0.1",
+  "private": true,
   "description": "Womboras Journal Helper for Foundry VTT",
   "main": "index.js",
-  "scripts": {
-    "build": "gulp build"
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/woodworker/womboras-journal-helper.git"
   },
-  "author": "",
+  "scripts": {
+    "watch": "webpack --env watch",
+    "build": "webpack",
+    "build:production": "webpack --mode production --env mode=production",
+    "start": "webpack serve --hot"
+  },
+  "author": "Martin Holzhauer (WooDWorkeR#9185)",
   "license": "MIT",
   "devDependencies": {
-    "gulp": "^4.0.2",
-    "gulp-typescript": "^6.0.0-alpha.1"
-  },
-  "dependencies": {
-    "@types/node": "^14.10.1",
-    "foundry-pc-types": "gitlab:foundry-projects/foundry-pc/foundry-pc-types",
-    "typescript": "^4.0.2"
+    "@types/marked": "^1.2.0",
+    "@types/webpack-env": "^1.15.3",
+    "@typescript-eslint/eslint-plugin": "^4.8.1",
+    "@typescript-eslint/parser": "^4.8.1",
+    "clean-webpack-plugin": "^3.0.0",
+    "copy-webpack-plugin": "^6.3.2",
+    "css-loader": "^5.0.1",
+    "eslint": "^7.14.0",
+    "eslint-config-prettier": "^6.15.0",
+    "eslint-loader": "^4.0.2",
+    "foundry-vtt-types": "github:League-of-Foundry-Developers/foundry-vtt-types",
+    "glob": "^7.1.6",
+    "marked": "^1.2.5",
+    "node-sass": "^5.0.0",
+    "node-sass-glob-importer": "^5.3.2",
+    "null-loader": "^4.0.1",
+    "prettier": "^2.2.0",
+    "raw-loader": "^4.0.2",
+    "sass-loader": "^10.1.0",
+    "source-map-loader": "^1.1.2",
+    "string-replace-loader": "^3.0.1",
+    "style-loader": "^2.0.0",
+    "ts-loader": "^8.0.11",
+    "typescript": "^4.1.2",
+    "webpack": "^5.6.0",
+    "webpack-cli": "^4.2.0",
+    "webpack-dev-server": "^3.11.0",
+    "webpack-import-glob-loader": "^1.6.3"
   }
 }

@@ -113,7 +113,7 @@ const resolveNamedTemplate = (foundryDocument: Entity, templateName: string): HT
         return getBrokenElement('Template not Found');
     }
 
-    const templateScript = Handlebars.compile(templateFile.data.content);
+    const templateScript = Handlebars.compile((templateFile.data as any).content);
     return htmlToElement(templateScript({...foundryDocument, id: foundryDocument.id, entity: foundryDocument.entity}));
 };
 

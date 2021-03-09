@@ -1,5 +1,5 @@
 ![](https://img.shields.io/badge/Foundry-v0.7.9-informational)
-![Latest Release Download Count](https://img.shields.io/github/downloads/woodworker/womboras-journal-helper/latest/womboras-journal-helper.zip)
+![Latest Release Download Count](https://img.shields.io/github/downloads/woodworker/womboras-journal-helper/total)
 
 <!--- Forge Bazaar Install % Badge -->
 <!--- replace <your-module-name> with the `name` in your manifest -->

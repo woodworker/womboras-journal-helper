@@ -1,4 +1,4 @@
-![](https://img.shields.io/badge/Foundry-v0.7.9-informational)
+![](https://img.shields.io/badge/Foundry-v0.8.9-informational)
 <!--- Downloads @ Latest Badge -->
 <!--- replace <user>/<repo> with your username/repository -->
 <!--- ![Latest Release Download Count](https://img.shields.io/github/downloads/woodworker/womboras-journal-helper/latest/module.zip) -->

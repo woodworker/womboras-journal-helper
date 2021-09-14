@@ -9,9 +9,9 @@
       "discord": "WooDWorkeR#9185"
     }
   ],
-  "version": "0.0.2",
-  "minimumCoreVersion": "0.7.9",
-  "compatibleCoreVersion": "0.7.9",
+  "version": "0.0.3",
+  "minimumCoreVersion": "0.8.6",
+  "compatibleCoreVersion": "0.8.9",
   "manifestPlusVersion": "1.0.0",
   "url": "https://github.com/woodworker/womboras-journal-helper",
   "manifest": "https://github.com/woodworker/womboras-journal-helper/releases/latest/download/module.json",

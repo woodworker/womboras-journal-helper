@@ -10,12 +10,13 @@ export const getTextNodes = (parent) => {
     return textNodes;
 };
 
-export const replaceTextContent = (text, rgx, func) => {
+export const replaceTextContent = (text: Node[], rgx: RegExp, func) => {
     let replaced = false;
     for (const t of text) {
-        const matches = t.textContent.matchAll(rgx);
+        const matches = t.textContent?.matchAll(rgx);
+        if (!matches) return replaced;
         for (const match of Array.from(matches).reverse()) {
-            // eslint-disable-next-line
+            // eslint-disable-next-line @typescript-eslint/no-explicit-any
             const replacement = func(...match as any);
             if (replacement) {
                 replaceTextNode(t, match, replacement);

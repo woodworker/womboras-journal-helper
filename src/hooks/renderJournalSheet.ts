@@ -1,7 +1,8 @@
 import { getTextNodes, replaceTextContent, htmlToElement } from "../library/text";
 
 const renderTableToChatButton = (html: JQuery<HTMLElement>) => {
-    if (!game.user.isGM) return;
+    if (!(game instanceof Game)) return;
+    if (!game.users?.get(game.userId || "")?.isGM) return;
 
     html.find("table").each((_, element) => {
         const button = $(`<button style="width:max-content;margin-bottom:1em;">Post Table to Chat</button>`);
@@ -26,18 +27,23 @@ const renderDocumentData = (html: JQuery<HTMLElement>): void => {
         textNodes,
         documentRegexp,
         (_, type, target, datapath): HTMLElement => {
-            let entity: Entity|null = null;
+            let document: Document|null = null;
             if (CONST.ENTITY_TYPES.includes(type)) {
-                const config = CONFIG[type];
-
                 // Get the linked Entity
-                const collection = config.entityClass.collection;
-                entity = /^[a-zA-Z0-9]{16}$/.test(target) ? collection.get(target) : collection.getName(target);
-                if (!entity) {
+                const collectionName = CONFIG[type].documentClass.collectionName;
+                const collection = game[collectionName];
+                document = /^[a-zA-Z0-9]{16}$/.test(target) ? collection.get(target) : collection.getName(target);
+                if (!document) {
                     return getBrokenElement('Entity not Found');
                 }
+                if (!datapath) {
+                    return getBrokenElement('No datapath given "#<Type>[<id>]{datapath|templatename}"');
+                }
             }
-            return resolveDocumentDisplay(entity, type, datapath);
+            if (document) {
+                return resolveDocumentDisplay(document, type, datapath);
+            }
+            return getBrokenElement('document');
         }
     );
 };
@@ -49,7 +55,7 @@ const renderDocumentData = (html: JQuery<HTMLElement>): void => {
  * @param documentType 
  * @param datapath 
  */
-const resolveDocumentDisplay = (foundryDocument, documentType, datapath: string): HTMLElement => {
+const resolveDocumentDisplay = (foundryDocument: Document, documentType, datapath: string): HTMLElement => {
     if (datapath.startsWith('"') && datapath.endsWith('"')) {
         return resolveNamedTemplate(foundryDocument, datapath);
     } else {
@@ -98,14 +104,23 @@ const resolveDataPath = (foundryDocument, documentType, datapath: string): HTMLE
  * @param foundryDocument 
  * @param templateName 
  */
-const resolveNamedTemplate = (foundryDocument: Entity, templateName: string): HTMLElement => {
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+const resolveNamedTemplate = (foundryDocument: StoredDocument<any>, templateName: string): HTMLElement => {
     templateName = templateName.slice(1, -1);
 
-    const templateFolder = CONFIG["Folder"].entityClass.collection.find((folder) => {
+    if (!(game instanceof Game)){
+        return getBrokenElement('Game not Found');
+    }
+
+    const templateFolder = game.folders?.find((folder) => {
         return folder.data.name == "_wjhelper" && folder.data.type == "JournalEntry";
     });
 
-    const templateFile = CONFIG["JournalEntry"].entityClass.collection.find((entry) => {
+    if (!templateFolder) {
+        return getBrokenElement('TemplateFolder not Found, create one called "_wjhelper"');
+    }
+
+    const templateFile = game.journal?.find((entry) => {
         return entry.data.folder == templateFolder.id && entry.data.name == templateName;
     });
 
@@ -113,8 +128,9 @@ const resolveNamedTemplate = (foundryDocument: Entity, templateName: string): HT
         return getBrokenElement('Template not Found');
     }
 
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     const templateScript = Handlebars.compile((templateFile.data as any).content);
-    return htmlToElement(templateScript({...foundryDocument, id: foundryDocument.id, entity: foundryDocument.entity}));
+    return htmlToElement(templateScript({documentName: foundryDocument.documentName, id: foundryDocument.id , data: foundryDocument.data}));//, 
 };
 
 const applyDataset = (element, data): void => {

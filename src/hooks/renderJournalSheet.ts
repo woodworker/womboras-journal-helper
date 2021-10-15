@@ -260,6 +260,10 @@ const getBrokenElement = (msg) => {
 export const renderJournalSheet = (_app: JournalSheet, html: JQuery<HTMLElement>, _data) => {
     console.log("Womboras Journal Renderer Executed");
     renderTableToChatButton(html);
-    renderRollRequests(html);
+
+    // only add if current game system is dnd5e
+    if ((game as Game).system.id === "dnd5e") {
+        renderRollRequests(html);
+    }
     renderDocumentData(html);
 };

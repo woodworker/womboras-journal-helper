@@ -1,0 +1,16 @@
+.wjh-toc {
+    float: right;
+    border: 1px solid black;
+    color: black;
+    background: whitesmoke;
+    padding: 0.5em;
+    margin-right: 1em;
+}
+
+.wjh-toc li {
+    cursor: pointer;
+}
+
+.wjh-toc li:hover {
+    text-decoration: underline;
+}

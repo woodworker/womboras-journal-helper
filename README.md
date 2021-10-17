@@ -17,6 +17,9 @@ as it is to the Chat.
 
 This Feature may be used for Price Lists of a Merchant or in a Bar
 
+There is also an option to filter out columns if a coresponding header cell
+text starts with a #
+
 ## "Enhanced" Journal Links
 
 There are also some Journal link improvements added.
@@ -36,11 +39,32 @@ For this to work there must be a journal folder created called `_wjhelper`.
 In this folder there can be journal entries created and handlebar variable syntax be used.
 
 For example i created myself a temapltes called `npc` with the following content to have a more detailed link
-in my journal entries when i want to link to an npc
+in my journal entries when i want to link to an dnd5e npc
+
 ```
 <p><a class="entity-link" data-id="{{id}}" data-entity="{{entity}}">{{data.name}} ({{data.data.details.type}})</a></p>
 ```
+## Table of Contents
 
+If you tend to write longer texts in to your Journals with a lot of headlines and sub headlines
+you can now add `[toc]` in your journal.
+
+The entries are clickable and will scroll the headline into view
+
+
+## Roll Requests
+
+When using the dnd5e system you can just write a roll into your journal and there will be clickable
+buttons when rendered. They will post a chat message so players do not need to search the specific button in thier
+charachter sheet and can just click to roll.
+
+Ability saves, skills checks and saves
+
+Examples:
+- `dex save`
+- `dexterity saving throw`
+- `sleight of hand check`
+- `sleight of hand ability Check`
 
 # License
 MIT License. Do what you will. PRs welcome. 

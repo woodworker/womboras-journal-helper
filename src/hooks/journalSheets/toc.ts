@@ -1,4 +1,3 @@
-import { data } from "@league-of-foundry-developers/foundry-vtt-types/src/foundry/common/module.mjs";
 import { getTextNodes, htmlToElement, replaceTextContent } from "../../library/text";
 
 export const renderToc = (element: HTMLElement | null): void => {

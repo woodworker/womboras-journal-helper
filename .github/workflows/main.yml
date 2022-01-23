@@ -17,11 +17,13 @@ jobs:
         run: echo "::set-output name=version::$(node ./.github/workflows/get-version.js)"
 
       - name: Install dependencies and run webpack
+        shell: bash
         run: |
           npm install --silent
           npm run build:production
 
       - name: Create installable module zip file
+        shell: bash
         working-directory: ./dist
         run: zip -r ../womboras-journal-helper.zip *
 

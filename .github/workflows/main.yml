@@ -22,7 +22,7 @@ jobs:
         run: echo "::set-output name=version::$(node ./.github/workflows/get-version.js)"
 
       - name: Install dependencies
-        run: npm install --silent
+        run: npm install
 
       - name: Build Production
         run: npm run build:production

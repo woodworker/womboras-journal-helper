@@ -3,7 +3,6 @@ import { getTextNodes, htmlToElement, replaceTextContent } from "../../library/t
 export const renderToc = (element: HTMLElement | null): void => {
     if (!element) return;
     const tocRexExp = new RegExp("\\[toc\\]", "gi");
-
     const textNodes = getTextNodes(element);
     replaceTextContent(textNodes, tocRexExp, (_): HTMLElement => {
         const headlineTags = ["h1", "h2", "h3", "h4", "h5", "h6"];
@@ -12,51 +11,52 @@ export const renderToc = (element: HTMLElement | null): void => {
             return parseInt(tag.substr(1, 1), 10);
         };
 
-        const iterator = document.createNodeIterator(element, NodeFilter.SHOW_ELEMENT);
+        const foundHeadlines = element.querySelectorAll(headlineTags.join(", "));
+
         let htmlString = `<div class="wjh-toc"><h3>Table of Content</h3><hr/>`;
-        let lastLevel = 0;
-        let currentNode;
-        let openUls = 0;
+        let tocHtml = "";
         const idPrefix = "wjh-toc";
-        const headlines: { level: number; text: string }[] = [];
-        while ((currentNode = iterator.nextNode())) {
-            if (currentNode instanceof HTMLElement && headlineTags.includes(currentNode.tagName.toLowerCase())) {
-                if (!currentNode.id) {
-                    currentNode.id = idPrefix + "_" + Math.random().toString(36).substr(2, 9);
+        let prevLevel = 0;
+        foundHeadlines.forEach((headline) => {
+            const level = getLevel(headline.tagName);
+            const diff = level - prevLevel;
+
+            if (diff > 0) {
+                for (let indent = 0; indent < diff; indent++) {
+                    tocHtml = `${tocHtml}<ul>`;
                 }
-
-                const level = getLevel(currentNode.tagName);
-
-                headlines.push({ level: level, text: currentNode.textContent ?? "" });
-
-                if (level > lastLevel) {
-                    openUls++;
-                    htmlString = `${htmlString}<ul>`;
-                }
-
-                htmlString = `${htmlString}<li data-id="${currentNode.id}">${currentNode.textContent}</li>`;
-
-                if (level < lastLevel) {
-                    openUls--;
-                    htmlString = `${htmlString}</ul>`;
-                }
-                lastLevel = level;
             }
+
+            if (diff < 0) {
+                for (let undent = 0; undent < Math.abs(diff); undent++) {
+                    tocHtml = `${tocHtml}</ul>`;
+                }
+            }
+
+            if (!headline.id) {
+                headline.id = idPrefix + "_" + Math.random().toString(36).substr(2, 9);
+            }
+
+            tocHtml = `${tocHtml}<li><a href="#" data-id="${headline.id}">${headline.textContent}</a></li>`;
+
+            prevLevel = level;
+        });
+
+        for (let undent = 0; undent < prevLevel; undent++) {
+            tocHtml = `${tocHtml}</ul>`;
         }
 
-        for (let i = 0; i < openUls; i++) {
-            htmlString = `${htmlString}</ul>`;
-        }
-        htmlString = `${htmlString}</div>`;
+        htmlString = `${tocHtml}</div>`;
 
         const tocElement = htmlToElement(htmlString);
         tocElement.addEventListener("click", (ev) => {
-            console.log(ev);
+            ev.preventDefault();
+            ev.stopPropagation();
             if (!ev.target) return;
             const dataId = (ev.target as HTMLElement).dataset.id;
             if (dataId && dataId.substr(0, idPrefix.length) == idPrefix) {
                 const headline = document.querySelector("#" + dataId);
-                headline?.scrollIntoView();
+                headline?.scrollIntoView({ behavior: "smooth", block: "end", inline: "nearest" });
             }
         });
         return tocElement;

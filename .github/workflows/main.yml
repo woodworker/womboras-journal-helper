@@ -10,17 +10,22 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
+      - uses: actions/setup-node@v2
+        with:
+          node-version: '16'
+          cache: 'npm'
+          cache-dependency-path: package-lock.json
 
       - name: Get Version
         shell: bash
         id: get-version
         run: echo "::set-output name=version::$(node ./.github/workflows/get-version.js)"
 
-      - name: Install dependencies and run webpack
-        shell: bash
-        run: |
-          npm install --silent
-          npm run build:production
+      - name: Install dependencies
+        run: npm install --silent
+
+      - name: Build Production
+        run: npm run build:production
 
       - name: Create installable module zip file
         shell: bash
